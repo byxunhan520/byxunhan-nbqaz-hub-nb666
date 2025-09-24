@@ -1,0 +1,53 @@
+local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/odhdshhe/lenglengui/refs/heads/main/JMJMUI.lua"))()        
+local win = ui:new("花落<寻涵>")
+local UITab84 = win:Tab("功能",'16060333448')
+
+local about = UITab84:section("『寻』",false)
+local tspeed = 16
+local tpwalking = false
+local player = game:GetService("Players")
+local lplr = player.LocalPlayer
+
+about:Label("我是缝合小子")
+about:Label("不要笑我")
+about:Label("已经老实")
+about:Label("🤫✊🏿😎")
+-- 移动速度滑条
+about:Slider("移动速度", "调整角色移动速度", 1, 1, 250, false, function(value)
+    tspeed = value
+end)
+
+-- 传送移动开关
+about:Toggle("传送移动", "启用/禁用传送移动", false, function(state)
+    tpwalking = state
+end)
+
+-- 传送移动逻辑
+task.spawn(function()
+    while true do
+        if tpwalking then
+            local chr = lplr.Character
+            local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+            local hrp = chr and chr:FindFirstChild("HumanoidRootPart")
+
+            if hum and hrp and hum.MoveDirection.Magnitude > 0 then
+                local speedFactor = tspeed / 16
+                local moveVector = hum.MoveDirection * (speedFactor * 2)
+                hrp.CFrame = hrp.CFrame + moveVector
+            end
+        end
+        task.wait(0) 
+    end
+end)
+
+local JumpPowerValue = 100
+about:Slider("跳", "跳高", 1, 75, 250, false, function(value)
+    JumpPowerValue = value
+end)
+about:Toggle("跳", "启用/禁用", false, function(Value)
+    if Value then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = JumpPowerValue
+    else
+        game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = 50
+    end
+end)
